@@ -126,6 +126,37 @@ Comments go on their own line. Back it up with `adb pull`, restore it with
 
 No permission is needed: the launcher reads its own folder.
 
+This fork adds **Options › Import wallpaper**. Choose a JPG, PNG or WebP with
+the system file picker. Canceling leaves the current wallpaper unchanged. Imported
+images are copied into the launcher's collection; the original is kept. Images
+must be no larger than 20 MB, 8192 pixels per side and 20 megapixels. A landscape
+image at 3840 × 2160 or 1920 × 1080 works well; the launcher fills the screen by
+cropping rather than stretching.
+
+Some Fire TVs have no file picker. Use **From shared transfer folder** instead:
+open it once to create the folder, copy images from your computer, then open it
+again and choose an image. On the primary internal storage:
+
+```sh
+adb shell mkdir -p /sdcard/Android/media/tv.dumbtv.home/wallpapers
+adb push landscape.jpg /sdcard/Android/media/tv.dumbtv.home/wallpapers/
+```
+
+The app displays the actual transfer path. This uses the app's own media folder,
+not the Android/data directory that ADB cannot access on some Fire OS 8 builds.
+The transfer folder is an inbox; after importing, the launcher keeps a separate
+copy. Remove inbox files from your computer if you no longer need them.
+
+After import, **Use with tint** selects the new wallpaper, sets **Adaptive
+wallpaper tint**, and switches rotation off so the selected image stays visible.
+Re-enable rotation in Options if wanted. **Keep current background** only adds the
+image to the collection.
+
+There is no URL fetcher, internet permission, background download or wallpaper
+service connection. Download any online image on your computer before transferring
+it. Wallpaper selection still requires an on-TV action; copying into the inbox
+alone does not change the background.
+
 - **One wallpaper:** push it as `wallpaper.jpg` (or `.jpeg`, `.png`, `.webp`) into
   the folder above and set `background=image`.
 - **Several:** push them into a `wallpapers/` subfolder, with any names, and pick a
